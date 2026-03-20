@@ -1,0 +1,27 @@
+name: Java CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Start SUT
+        run: |
+          java -jar artifacts/app-mbank.jar &
+          sleep 10
+
+      - name: Run tests
+        run: ./gradlew test
